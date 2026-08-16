@@ -37,3 +37,35 @@ export function formatCurrency(amount: number): string {
     maximumFractionDigits: 2,
   }).format(amount);
 }
+
+// A short "how we got this number" line, e.g. "$60.00/kg × 1kg = $60.00" or
+// "(avg($60.00, $70.00) + $15.00)/kg × 3kg + $30.00 = $240.00". Takes the
+// already-computed total rather than recalculating it, so the breakdown can
+// never disagree with the price shown elsewhere.
+export function describePriceBreakdown(params: {
+  tier: 1 | 2;
+  pricePerKgA: number;
+  pricePerKgB: number | null;
+  weightKg: number;
+  buttercream: boolean;
+  total: number;
+}): string {
+  const { tier, pricePerKgA, pricePerKgB, weightKg, buttercream, total } =
+    params;
+
+  const rateLabel =
+    pricePerKgB !== null
+      ? `avg(${formatCurrency(pricePerKgA)}, ${formatCurrency(pricePerKgB)})`
+      : formatCurrency(pricePerKgA);
+
+  const rateExpr = buttercream
+    ? `(${rateLabel} + ${formatCurrency(BUTTERCREAM_SURCHARGE_PER_KG)})/kg`
+    : `${rateLabel}/kg`;
+
+  let expr = `${rateExpr} × ${weightKg}kg`;
+  if (tier === 2) {
+    expr += ` + ${formatCurrency(TWO_TIER_ADDON)}`;
+  }
+
+  return `${expr} = ${formatCurrency(total)}`;
+}

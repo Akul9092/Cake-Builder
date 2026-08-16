@@ -1,4 +1,4 @@
-import { formatCurrency } from "./pricing";
+import { describePriceBreakdown, formatCurrency } from "./pricing";
 import { formatDisplayDate, isWithinNextDays } from "./dateWarning";
 import { SITE_NAME, WHATSAPP_NUMBER } from "./constants";
 import type { CakeOption, TierCount } from "./types";
@@ -25,18 +25,28 @@ export function buildMessage(order: OrderIdea): string {
     ? `${formatDisplayDate(order.date)} — This is late, check with baker`
     : formatDisplayDate(order.date);
 
+  const priceBreakdown = describePriceBreakdown({
+    tier: order.tier,
+    pricePerKgA: order.flavorA.pricePerKg,
+    pricePerKgB: order.tier === 2 ? (order.flavorB?.pricePerKg ?? null) : null,
+    weightKg: order.weightKg,
+    buttercream: order.buttercream,
+    total: order.price,
+  });
+
   return [
-    `*New Cake Idea from ${SITE_NAME} website*`,
+    `Hi ${SITE_NAME}! Here's my cake idea`,
     "",
     `Cake: ${cakeLine}`,
     `Tier: ${order.tier === 2 ? "2-Tier" : "1-Tier"}`,
     `Finish: ${order.buttercream ? "Buttercream (+$15/kg)" : "Cream"}`,
     `Egg preference: ${order.eggless ? "Eggless" : "Egg"} (no price difference)`,
     `Weight: ${order.weightKg} kg`,
+    `Price Breakdown: ${priceBreakdown}`,
     `Estimated Price: ${formatCurrency(order.price)}++ (before customisation)`,
     `Pickup Date: ${dateLine}`,
     "",
-    `— Sent via ${SITE_NAME} website`,
+    "Thanks so much, looking forward to hearing from you!",
   ].join("\n");
 }
 

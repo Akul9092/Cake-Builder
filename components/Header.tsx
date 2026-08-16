@@ -13,9 +13,9 @@ export default function Header() {
         <p className="text-sm text-ink-soft">Gourmet Egg and Eggless Cakes</p>
       </div>
       <div className="flex flex-wrap items-center justify-end gap-3">
+        <FacebookPagePlugin />
         <InstagramCard />
         <WhatsAppLink />
-        <FacebookPagePlugin />
       </div>
     </header>
   );
