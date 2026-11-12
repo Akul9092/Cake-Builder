@@ -5,6 +5,12 @@ import {
   TWO_TIER_ADDON,
 } from "./constants";
 
+export function finishLabel(buttercream: boolean): string {
+  return buttercream
+    ? `Buttercream (+$${BUTTERCREAM_SURCHARGE_PER_KG}/kg)`
+    : "Whipped cream (included)";
+}
+
 export function calcOneTierPrice(
   pricePerKg: number,
   weightKg: number,

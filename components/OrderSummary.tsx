@@ -1,4 +1,4 @@
-import { formatCurrency } from "@/lib/pricing";
+import { finishLabel, formatCurrency } from "@/lib/pricing";
 import { formatDisplayDate, isWithinNextDays } from "@/lib/dateWarning";
 import type { CakeOption, TierCount } from "@/lib/types";
 
@@ -47,10 +47,7 @@ export default function OrderSummary({
       <div className="divide-y divide-cream-dark">
         <Row label="Cake" value={cakeText} />
         <Row label="Tier" value={tier === 2 ? "2-Tier" : "1-Tier"} />
-        <Row
-          label="Finish"
-          value={buttercream ? "Buttercream (+$15/kg)" : "Cream"}
-        />
+        <Row label="Finish" value={finishLabel(buttercream)} />
         <Row label="Egg preference" value={eggless ? "Eggless" : "Egg"} />
         <Row label="Weight" value={`${weightKg} kg`} />
         <Row label="Date" value={date ? formatDisplayDate(date) : "—"} />

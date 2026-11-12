@@ -1,4 +1,8 @@
-import { describePriceBreakdown, formatCurrency } from "./pricing";
+import {
+  describePriceBreakdown,
+  finishLabel,
+  formatCurrency,
+} from "./pricing";
 import { formatDisplayDate, isWithinNextDays } from "./dateWarning";
 import { SITE_NAME, WHATSAPP_NUMBER } from "./constants";
 import type { CakeOption, TierCount } from "./types";
@@ -39,7 +43,7 @@ export function buildMessage(order: OrderIdea): string {
     "",
     `Cake: ${cakeLine}`,
     `Tier: ${order.tier === 2 ? "2-Tier" : "1-Tier"}`,
-    `Finish: ${order.buttercream ? "Buttercream (+$15/kg)" : "Cream"}`,
+    `Finish: ${finishLabel(order.buttercream)}`,
     `Egg preference: ${order.eggless ? "Eggless" : "Egg"} (no price difference)`,
     `Weight: ${order.weightKg} kg`,
     `Price Breakdown: ${priceBreakdown}`,
